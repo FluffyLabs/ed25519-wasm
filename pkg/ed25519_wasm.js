@@ -26,28 +26,37 @@ function getArrayU8FromWasm0(ptr, len) {
     return getUint8ArrayMemory0().subarray(ptr / 1, ptr / 1 + len);
 }
 /**
+ *
+ * * Verify Ed25519 signatures one by one using strict verification.
+ * *
+ * * This function is slower but does strict verification.
+ *
  * @param {Uint8Array} data
- * @param {number} item_length
  * @returns {Uint8Array}
  */
-module.exports.verify_ed25519 = function(data, item_length) {
+module.exports.verify_ed25519 = function(data) {
     const ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
-    const ret = wasm.verify_ed25519(ptr0, len0, item_length);
+    const ret = wasm.verify_ed25519(ptr0, len0);
     var v2 = getArrayU8FromWasm0(ret[0], ret[1]).slice();
     wasm.__wbindgen_free(ret[0], ret[1] * 1, 1);
     return v2;
 };
 
 /**
+ *
+ * * Verify Ed25519 signatures using build-in batch verification.
+ * *
+ * * This function is faster but does not do strict verification.
+ * * See https://crates.io/crates/ed25519-dalek#batch-verification for more information.
+ *
  * @param {Uint8Array} data
- * @param {number} item_length
  * @returns {boolean}
  */
-module.exports.verify_ed25519_batch = function(data, item_length) {
+module.exports.verify_ed25519_batch = function(data) {
     const ptr0 = passArray8ToWasm0(data, wasm.__wbindgen_malloc);
     const len0 = WASM_VECTOR_LEN;
-    const ret = wasm.verify_ed25519_batch(ptr0, len0, item_length);
+    const ret = wasm.verify_ed25519_batch(ptr0, len0);
     return ret !== 0;
 };
 
